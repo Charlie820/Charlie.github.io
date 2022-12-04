@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+	#Schnekboard{
+		width: 400px;
+		height: 400px;
+		border: 2px solid black;
+		align-items: center;
+		margin: auto;
+		left: 200px;
+	}
+
+		.white-square{
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: green;
+			z-index: 2;	
+			margin-left: 0px;
+			margin-bottom: -4px;
+		}
+
+		.black-square{
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: darkgreen;
+			z-index: 2;
+			margin-left: 0px;
+			margin-bottom: -4px;
+		}
+
+	#startbutton{
+		width: 200px;
+		height: 50px;
+		background-color: pink;
+		margin: auto;
+		top: 600px;
+		text-align: center;
+	}
+
+	#pausebutton{
+		width: 200px;
+		height: 50px;
+		background-color: pink;
+		margin: auto;
+		text-align: center;
+	}
+
+		#scoreboard{
+		width: 200px;
+		height: 50px;
+		background-color: pink;
+		margin: auto;
+		text-align: center;
+	}
+
+
+	#gameover{
+		position: absolute;
+		width: 50%;
+		height: 800px;
+		font-size: 135px;
+		left: 35%;
+		top: 50px;
+		z-index: 3;
+		justify-content: center;
+	}
+
+	.snakeBody{
+		background-color: purple;
+	}
+
+</style>
+</head>
+<body>
+
+<div id=Schnekboard></div>
+
+<div id=startbutton>CLICK HERE TO START</div>
+<div id=pausebutton>CLICK TO PAUSE</div>
+<div id=gameover>GAME OVER</div>
+<div id=scoreboard>SCORE: 5</div>
+<script type="text/javascript">
+	
+var tenssquarenumber= 0
+var squarenumber= 0
+
+function makeSnakeBoard() {
+
+		if (squarenumber%11==10){
+			tenssquarenumber= tenssquarenumber+1
+			squarenumber= 1
+		}
+		else{
+		squarenumber= squarenumber+1
+		}
+
+		var oddsquare= document.createElement("div");
+		Schnekboard.appendChild(oddsquare);
+		if ((tenssquarenumber)%2==0){
+			oddsquare.classList.add("white-square");
+		}
+		else{
+			oddsquare.classList.add("black-square");
+		}
+		oddsquare.id= ("square"+((squarenumber*2)+(tenssquarenumber*100)+99))
+
+		var evensquare= document.createElement("div");
+		Schnekboard.appendChild(evensquare);
+		if ((tenssquarenumber)%2==1){
+			evensquare.classList.add("white-square");
+		}
+		else{
+			evensquare.classList.add("black-square");
+		}
+		evensquare.id= ("square"+((squarenumber*2)+(tenssquarenumber*100)+100))
+}
+
+	for (var i = 0; i<200; i=i+1){
+		makeSnakeBoard()
+	}
+
+var applePositionx
+var applePositiony
+var applePosition
+var snakeLength=5
+var snakeHeadPosition=1101
+var gamePlayCheck=0
+var snakeFacing=2
+var ticknumber=1
+var snakeSegment
+var resetSquare
+var turningBugFix=1
+var anotherBugFix=0
+
+function gamePlay(){
+if(snakeFacing==1){
+snakeHeadPosition=snakeHeadPosition-100
+turningBugFix=0
+}
+
+if(snakeFacing==2){
+snakeHeadPosition=snakeHeadPosition+1
+turningBugFix=0
+}
+
+if(snakeFacing==3){
+snakeHeadPosition=snakeHeadPosition+100
+turningBugFix=0
+}
+
+if(snakeFacing==4){
+snakeHeadPosition=snakeHeadPosition-1
+turningBugFix=0
+}
+
+if(snakeHeadPosition>2020 || snakeHeadPosition<100 || snakeHeadPosition%100<1 || snakeHeadPosition%100>20){
+gameLose()
+}
+
+if (snakeHeadPosition==applePosition){
+snakeLength=snakeLength+1
+appleRandom()
+scoreboard.innerHTML="SCORE:"+snakeLength
+}
+
+snakeSegmentPosition=document.getElementsByClassName("snakeBody")
+var array = arrayConverter()
+array.forEach(
+	function(element){
+		if(element==document.getElementById("square"+snakeHeadPosition)){
+			gameLose()
+		}
+		if(element==document.getElementById("square"+applePosition))
+			appleRandom()
+			element.style.backgroundColor="purple"
+	})
+
+if (("square"+snakeHeadPosition)>0){
+gameLose()
+}
+
+document.getElementById("square"+snakeHeadPosition).style.backgroundColor = "purple"
+snakeSegment=document.getElementById("square"+snakeHeadPosition)
+snakeSegment.classList.add(ticknumber)
+snakeSegment.classList.add("snakeBody")
+}
+
+function arrayConverter(){
+	return Array.from(snakeSegmentPosition)
+}
+
+function arrayConverter2(){
+	return Array.from(resetSquare)
+}
+
+function squareColorResetSnake(){
+if (ticknumber-snakeLength+2>1){
+resetSquare= document.getElementsByClassName(ticknumber-snakeLength)
+var array = arrayConverter2()
+if((ticknumber-snakeLength)%2==0){
+array.forEach(
+	function(element){
+		element.style.backgroundColor="darkgreen"
+		element.classList.remove(ticknumber-snakeLength)
+		element.classList.remove("snakeBody")})
+}
+if((ticknumber-snakeLength)%2==1){
+array.forEach(
+	function(element){
+		element.style.backgroundColor="green"
+		element.classList.remove(ticknumber-snakeLength)
+		element.classList.remove("snakeBody")})
+}}}
+
+
+
+gameover.style = "display:none"
+
+function gameLose(){
+gamePlayCheck=0
+gameover.style = "display:show"
+}
+
+function appleRandom(){
+squareColorReset()
+applePositionx = Math.floor(20 * Math.random()+1)
+applePositiony = 100*Math.floor(20* Math.random()+1)
+applePosition= applePositiony+applePositionx
+document.getElementById("square"+applePosition).style.backgroundColor = "red"
+console.log(applePosition)
+}
+
+startbutton.addEventListener("click", function(){
+if (gamePlayCheck==0){
+gamePlayCheck=1
+pausebutton.style = "display:show"
+scoreboard.style = "display:show"
+if(anotherBugFix==0){
+appleRandom()
+anotherBugFix=1
+setInterval(gamePlayRunner, 200)
+}}})
+
+function gamePlayRunner() {
+if(gamePlayCheck==1){
+ticknumber=ticknumber+1
+squareColorResetSnake()
+gamePlay()
+}}
+
+pausebutton.addEventListener("click", function(){
+pausebutton.style = "display:none"
+gameover.style = "display:none"
+gamePlayCheck=0
+})
+
+pausebutton.style = "display:none"
+scoreboard.style = "display:none"
+
+document.onkeydown = (e) => {
+  e = e || window.event;
+  if (e.key === 'ArrowUp' && snakeFacing!=3 && gamePlayCheck==1 && turningBugFix==0) {
+  	snakeFacing=1
+  	turningBugFix=1
+    console.log('up arrow pressed')
+  } if (e.key === 'ArrowDown' && snakeFacing!=1 && gamePlayCheck==1 && turningBugFix==0) {
+  	snakeFacing=3
+  	turningBugFix=1
+    console.log('down arrow pressed')
+  } if (e.key === 'ArrowLeft'  && snakeFacing!=2 && gamePlayCheck==1 && turningBugFix==0) {
+  	snakeFacing=4
+  	turningBugFix=1
+    console.log('left arrow pressed')
+  } if (e.key === 'ArrowRight' && snakeFacing!=4 && gamePlayCheck==1 && turningBugFix==0) {
+  	snakeFacing=2
+  	turningBugFix=1
+    console.log('right arrow pressed')
+  }
+}
+
+function squareColorReset(){
+if(((applePosition%100)+(applePosition-(applePosition%100))/100)%2==0){
+document.getElementById("square"+applePosition).style.backgroundColor = "green"
+}
+if(((applePosition%100)+(applePosition-(applePosition%100))/100)%2==1){
+document.getElementById("square"+applePosition).style.backgroundColor = "darkgreen"
+}}
+
+</script>
+
+</body>
+</html>

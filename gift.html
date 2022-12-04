@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	
+</head>
+<body>
+
+<center>Gavin is Gavin</center>
+
+<audio src="something.mp3" id="song"></audio>
+
+<script type="text/javascript">
+	
+var clicks =0
+
+document.addEventListener("click", function(){
+
+	clicks=clicks+1
+
+	if(clicks%2 == 1){
+		song.play()
+		console.log(clicks)
+	}
+
+	if(clicks%2 == 0){
+		song.pause()
+		console.log(clicks)
+	}
+
+})
+
+</script>
+
+</body>
+</html>

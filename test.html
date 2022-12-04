@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+
+		#\32\33{
+			background-color:  orange;
+		}
+
+		.box{
+			height: 60px;
+			width: 60px;
+			background-color: red;
+			position: absolute;
+		}
+
+		#red{
+			background-color: red;
+		}
+
+		#orange{
+			background-color: orange;
+		}
+
+		#yellow{
+			background-color: yellow;
+		}
+
+		#green{
+			background-color: green;
+		}
+
+		#blue{
+			background-color: blue;
+		}
+
+		#purple{
+			background-color: purple;
+		}
+
+	</style>
+</head>
+<body>
+
+	<script type="text/javascript">
+
+		var color= 0
+
+		document.addEventListener("click", function (event){
+		var box= document.createElement("div")
+		document.body.appendChild(box)
+		box.classList.add("box")
+		box.style.top= event.clientY-30+"px"
+		box.style.left=	event.clientX-30+"px"
+		color=color+1
+			if (color%6==1) {
+				box.id=("red")
+			}
+			if (color%6==2) {
+				box.id=("orange")
+			}
+			if (color%6==3) {
+				box.id=("yellow")
+			}
+			if (color%6==4) {
+				box.id=("green")
+			}
+			if (color%6==5) {
+				box.id=("blue")
+			}
+			if (color%6==0) {
+				box.id=("purple")
+			}
+
+		var something = document.getElementById("red")
+		something.style.backgroundColor = "blue"
+		console.log(something)
+		})
+
+
+	</script>
+
+</body>
+</html>
