@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		
+	#flashcard{
+		height:200px;
+		width:800px;
+		text-align: center;
+		border:2px solid black;
+		font-size: 80px;
+		margin: auto;
+	}
+
+	#nextbutton{
+		height:100px;
+		width:200px;
+		text-align: center;
+		font-size: 25px;
+		border:2px solid black;
+		margin: auto;
+	}
+
+	</style>
+
+</head>
+<body>
+
+<div id=flashcard></div>
+<div id=nextbutton> Next card</div>
+
+<script type="text/javascript">
+	var click=1
+	var studyset = ["Great Dionysia of the City", "Theatron", "Orchestra", "Iambic trimeter", "Prologue", "Parados", "Skene", "Exodos", "Chorus", "Strophe", "Antisrophe", "Stasimon", "Kommos", "Peripeteia", "Anagnorisis", "Metatheatricality", "Catharsis", "Moira", "Catastrophe", "Hamartia"]
+	var studysetanswers = [
+		"Festival of Dionysus, origin of Greek tragedy", 
+		"Area created for ceremonies",
+		"Performance space in the theatron",
+		"Meter that tragedies used",
+		"Expository phase before the chorus enters, sets tone",
+		"Side entrances of the theater",
+		"Back entrance of the theater",
+		"Concluding scene",
+		"Group of citizens who commented and engaged with the play",
+		"Chant for the chorus ode",
+		"Strophe chanted in reverse movement",
+		"The ode sung by the chorus, alternates with dialogue scenes",
+		"Lyric dialogue between the actor and the chorus",
+		"Reversal of circumstances",
+		"A sudden awareness of the character leading to the peripeteia",
+		"Theatre commenting on itself",
+		"Release of emotions, envoking dramatic empathy",
+		"One's fate and forces of universal balance",
+		"Collapse of fortune",
+		"Tragic flaw of the hero"
+		]
+
+var flashcardnumber=Math.floor(Math.random()*20)
+flashcard.innerHTML=studyset[flashcardnumber]
+
+
+	nextbutton.addEventListener("click", function(){
+		click=1
+		flashcardnumber=Math.floor(Math.random()*20)
+		flashcard.style.fontSize = "80px"
+		flashcard.innerHTML=studyset[flashcardnumber]
+
+		console.log(flashcard.getBoundingClientRect())
+	})
+
+	flashcard.addEventListener("click", function(){
+		if(click%2==0){
+			click++
+			flashcard.style.fontSize = "80px"
+			flashcard.innerHTML=studyset[flashcardnumber]
+			console.log(flashcardnumber)
+		}
+		else{
+			click++
+			flashcard.style.fontSize = "40px"
+			flashcard.innerHTML=studysetanswers[flashcardnumber]
+			console.log(flashcardnumber)
+		}
+	})
+
+
+</script>
+
+</body>
+</html>

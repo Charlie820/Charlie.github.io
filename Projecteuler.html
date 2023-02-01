@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<p>I recently found something online called project euler. According to their website, their problems require computer programmic to perform more complicated mathematical tasks. I've generally considered myself to be a strong student in those fields, so I wanted to try solving the problems that they have posted.  </p>
+
+<a href="https://projecteuler.net/archives"> Here are the problems for reference</a>
+
+<p>Problem 1: Find the sum of all the multiples of 3 or 5 below 1000.</p>
+
+<p> This one is easy. I just took some variable "number" and ran it through a function that checked if the number mod 3=0, then checked if the number mod 5=0. If it found that those were true, it would put them into an array, seen below. I only went up to 100 so it wouldn't overcrowd the page, but the process is here.</p>
+
+<p id=problem1></p>
+
+<script type="text/javascript">
+	var Problem1answers=[]
+	function runProblem1(x){
+	if(x%3==0){
+		Problem1answers.push(" "+x)
+	}
+	else if(x%5==0){
+		Problem1answers.push(" "+x)
+	}
+	else{
+		}
+	if(x<100){
+		runProblem1(x+1)
+		}
+
+	console.log(Problem1answers)
+	document.getElementById("problem1").innerHTML=(Problem1answers)
+	document.getElementById("Problem1button").style = "display: none"
+}
+
+</script>
+
+<button onclick = "runProblem1(1)" id="Problem1button">See answer</button>
+
+<p>Problem 2: By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.</p>
+
+<p> This one also isn't too bad. The fibonacci numbers were pretty easy to calculate by just putting them in an array and then adding the previous number to the current number to get the next one. Then, I just checked every number in that array to see if it was even by seeing if the remainder was 0 when divided by 2. </p>
+
+<p id=Problem2></p>
+
+<script type="text/javascript">
+	var Problem2answers=[]
+	var Fibonaccinumbers=[1]
+	function runProblem2(x){
+	if(x<4000000){
+	Fibonaccinumbers.push(x)
+	runProblem2(x+Fibonaccinumbers[Fibonaccinumbers.length-2])
+	}
+	else{
+	Fibonaccinumbers.forEach(
+		function(element){
+			if(element%2==0){
+				Problem2answers.push(" "+element)
+			}
+		}
+		)
+	}
+	console.log(Fibonaccinumbers)
+	document.getElementById("Problem2").innerHTML=(Problem2answers)
+	document.getElementById("Problem2button").style = "display: none"
+}
+</script>
+
+<button onclick = "runProblem2(1)" id="Problem2button">See answer</button>
+
+<p>Problem 3: What is the largest prime factor of the number 600851475143?</p>
+
+<p>At first, I thought about approaching this problem by attempting to find as many primes as possible, then dividing 600851475143 by those numbers. However, while it's possible to write a function that checks every number to see if it's prime, it's inefficient and would take a lot of unnecessary work. Then I realized that a more efficient method isn't to check for primes and then look for divisibility, the beter method is to just divide 600851475143 by increasingly large positive integers, and the numbers that evenly divide will just be the prime numbers. We will get the largest prime factor once we can't divide anymore.</p>
+
+<p id="Problem3"></p>
+
+<script type="text/javascript">
+	
+	var PrimeFactors=[]
+
+	function PrimeFactor(number){
+		PrimeFactors=[]
+		Factor(number, 2)
+		return PrimeFactors
+	}
+		function Factor(number, dividend){
+			if(number%dividend==0){
+				PrimeFactors.push(dividend)
+				Factor(number/dividend, 2)
+			}
+			else if(Math.sqrt(number)>dividend){
+				Factor(number, dividend+1)
+			}
+			else{
+				PrimeFactors.push(number)
+				return PrimeFactors
+			}
+		}
+
+function runProblem3(x){
+PrimeFactor(x)
+document.getElementById("Problem3").innerHTML=(PrimeFactors[PrimeFactors.length-1])
+document.getElementById("Problem3button").style = "display: none"
+}
+
+</script>
+
+<button onclick = "runProblem3(600851475143)" id="Problem3button">See answer</button>
+
+
+
+<p>Problem 4 has been omitted for being a boring problem</p>
+
+<p>Problem 5: What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?</p>
+
+<p>The method to figure this one out is easy: Prime factor all numbers from 1-20, then find the smallest set of primes such that the prime factorization of each number is a subset. Since we already have a function set up to prime factor numbers, we just . </p>
+
+<p>Problem 12: What is the value of the first triangle number to have over five hundred divisors?</p>
+
+<p>I started skipping around a bit, and landed on this problem because it looked exciting to me. As soon as I saw it, I knew that there's a couple cool tricks I can use for this problem. Firstly, the <i>n</i>th triangle number is (n)(n+1) &frasl; 2. Secondly, the amount of divisors a number has is based on how many unique prime factors there are, and then seeing how many ways there are to combine those factors into other numbers using very basic combinatorics. For example, the number 72 has 12 factors because 2 is a factor 3 times and 3 is a factor 2 times. So, a way to find the amount of divisors is to say that each factor of 72 includes 2 in its prime factorization 0, 1, 2, or 3 times and includes 3 in its prime factorization 0, 1, or 2 times. So, since there are 4 ways to put 2 in a factor and 3 ways to put 3 in a factor, 3x4=12 total factors. So, we can just use this process after finding the prime factorization of (n)(n+1) &frasl; 2, which we already have a function for from problem 3. </p>
+
+</body>
+</html>

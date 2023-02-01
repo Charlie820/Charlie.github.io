@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		
+		#mario{
+			height: 60px;
+			width: 60px;
+			background-color: transparent;
+			background-size: 60px 60px;
+			position: absolute;
+			
+			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2F-73un_heyjIbvBfwfUGPzaqFZlPJnyxsA&usqp=CAU");
+		}
+
+	</style>
+</head>
+<body>
+
+<div id=mario></div>
+
+<script type="text/javascript">
+	
+var height=300
+var xposition=500
+
+mario.style.top= height+"px"
+mario.style.left= xposition+"px"
+
+const gravity= 1
+var upVelocity= 0
+var midair= "no"
+var runningVelocity= 0 
+var runningAcceleration= 0
+var runningResistance=0
+console.log(mario.style.top)
+
+
+document.addEventListener('keydown', function(e){
+	if(e.key== 'ArrowUp'){
+		if(midair=="no"){
+		jumpInterval=setInterval(jump, 15)
+		upVelocity=upVelocity+30
+		midair="yes"
+	}
+	}
+	if(e.key== 'ArrowRight'){
+		strafeInterval=setInterval(strafe, 3)
+		runningAcceleration= .05
+	}
+	if(e.key== 'ArrowLeft'){
+		strafeInterval=setInterval(strafe, 3)
+		runningAcceleration= -.05
+	}
+})
+
+document.addEventListener('keyup', function(e){
+	if(e.key== 'ArrowRight'){
+		runningAcceleration= 0
+	}
+	if(e.key== 'ArrowLeft'){
+		runningAcceleration= 0
+	}
+})
+
+function strafe(){
+	if(runningVelocity<0){
+	runningResistance=(runningVelocity^2)*(.01)
+}	
+	if(runningVelocity>=0){
+	runningResistance=(runningVelocity^2)*(-.01)
+		}
+	runningVelocity=runningVelocity+runningAcceleration+runningResistance
+	xposition=xposition+runningVelocity
+	mario.style.left=xposition+"px"
+	console.log(runningVelocity)
+	console.log(runningResistance)
+}
+
+
+
+function jump(){
+	upVelocity=upVelocity-gravity
+	height=height-upVelocity
+	mario.style.top=height+"px"
+	console.log(upVelocity)
+	console.log(height)
+	if(height>=300){
+		midair="no"
+		upVelocity=0
+		mario.style.top=300+"px"
+		clearInterval(jumpInterval)
+	}
+}
+
+</script>
+
+</body>
+</html>

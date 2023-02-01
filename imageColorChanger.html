@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+	
+	#pic{
+		width:800px;
+		height:600px;
+		filter: hue-rotate(90deg);
+	}
+
+</style>
+
+
+</head>
+<body>
+
+<img src="download.jpg" id=pic>
+
+<script type="text/javascript">
+
+	document.addEventListener("mousemove", function(){	
+		pic.style.filter="hue-rotate(" +event.clientX/(800/360)+ "deg)"
+	})
+
+</script>
+
+</body>
+</html>

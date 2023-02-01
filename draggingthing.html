@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+
+.box{
+	background-color:rgba(0, 255, 0, .3);
+	height:50px;
+	width: 300px;
+	border: 2px solid black;
+	position: absolute;
+}
+</style>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+var array = []
+
+var boxnumber=0
+
+function createBoxes(){
+ boxnumber++
+ var newbox= document.createElement("div")
+ document.body.appendChild(newbox)
+ newbox.style.left= Math.random()*1120+"px"
+ newbox.style.top= Math.random()*740+"px"
+ newbox.id= "box"+boxnumber
+ newbox.classList.add("box")
+ array.push(newbox)
+}
+
+for(var i=0; i<6; i=i+1){
+	createBoxes()
+}
+
+console.log(array)
+
+var boxclicked=0
+
+array.forEach(
+	function(element){
+		element.addEventListener("click", function(){
+			console.log("ee")
+			console.log(boxclicked)
+			if(boxclicked==0){
+				boxclicked=1
+			}
+
+			while(boxclicked=1){
+				element.style.top= event.clientY-30+"px"
+				element.style.left= event.clientX-30+"px"
+			}
+			console.log(boxclicked)
+		})
+	}
+	)
+
+document.body.addEventListener("click", function(){
+	if(boxclicked==1){
+		console.log(boxclicked)
+		boxclicked=0
+	}
+})
+
+</script>
+
+</body>
+</html>

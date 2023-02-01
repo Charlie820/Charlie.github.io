@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+	#board{
+		width: 600px;
+		height: 600px;
+		border: 2px solid black;
+		align-items: center;
+		margin: auto;
+		left: 200px;
+	}
+
+		.white-square{
+			display: inline-block;
+			width: 25px;
+			height: 25px;
+			background-color: green;
+			z-index: 2;	
+			margin-left: 0px;
+			margin-bottom: -4px;
+		}
+
+		.black-square{
+			display: inline-block;
+			width: 25px;
+			height: 25px;
+			background-color: darkgreen;
+			z-index: 2;
+			margin-left: 0px;
+			margin-bottom: -4px;
+		}
+
+</style>
+<div id=board></div>
+
+<script type="text/javascript">
+var tenssquarenumber= 0
+var squarenumber= 0
+
+function makeBoard() {
+
+		if (squarenumber%25==12){
+			tenssquarenumber= tenssquarenumber+1
+			squarenumber= 1
+		}
+		else{
+		squarenumber= squarenumber+1
+		}
+
+		var oddsquare= document.createElement("div");
+		board.appendChild(oddsquare);
+		if ((tenssquarenumber)%2==0){
+			oddsquare.classList.add("white-square")
+			oddsquare.classList.add("square");
+		}
+		else{
+			oddsquare.classList.add("black-square")
+			oddsquare.classList.add("square");
+		}
+		oddsquare.id= (((squarenumber*2)+(tenssquarenumber*100)+99))
+
+		var evensquare= document.createElement("div");
+		board.appendChild(evensquare);
+		if ((tenssquarenumber)%2==1){
+			evensquare.classList.add("white-square")
+			evensquare.classList.add("square");
+		}
+		else{
+			evensquare.classList.add("black-square")
+			evensquare.classList.add("square");
+		}
+		evensquare.id= (((squarenumber*2)+(tenssquarenumber*100)+100))
+}
+
+	for (var i = 0; i<288; i=i+1){
+		makeBoard()
+	}
+
+var minePositionx
+var minePositiony
+var minePosition
+var startingClickPositionX
+var startingClickPositionY
+var gamePlayStart = "None"
+var mines
+var mineMaker
+var newMine
+var BugFix=0
+
+function arrayConverter(x){
+	if (x==1){
+	return Array.from(squares)
+	}
+	if(x==2){
+	return Array.from(mineMaker)
+	}
+}
+
+function createMines(){
+minePositionx = Math.floor(24 * Math.random()+1)
+minePositiony = 100*Math.floor(24* Math.random()+1)
+minePosition = minePositiony + minePositionx
+newMine=document.getElementById(minePosition)
+mineMaker = document.getElementsByClassName("mine")
+mines=arrayConverter(2)
+if (BugFix==0){
+	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=3 || Math.abs(startingClickPositionX-((newMine.id)%100))>=3)){
+	newMine.classList.add("mine")
+	newMine.style.backgroundColor="red"
+	}
+	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)<=2 && Math.abs(startingClickPositionX-((newMine.id)%100)<=2)))
+	createMines()
+}
+
+mines.forEach(
+	function (element){
+		if(element != newMine && (Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=3 || Math.abs(startingClickPositionX-((newMine.id)%100))>=3)){
+			newMine.classList.add("mine")
+			newMine.style.backgroundColor="red"
+			// mineIdAssigner(newMine.id)
+		}
+		else{
+		createMines()
+		}
+	})
+BugFix++
+}
+
+function gameLose(){
+mine.forEach(
+	function (element){
+		element.style.backgroundColor= "red"
+		console.log("lose")
+	})
+}
+
+// function mineIdAssigner(nextMine){
+// document.getElementById(nextMine-100).id= document.getElementById(nextMine-100).id + 10000
+// document.getElementById(nextMine-101).id= document.getElementById(nextMine-101).id + 10000
+// document.getElementById(nextMine-1).id= document.getElementById(nextMine-1).id + 10000
+// document.getElementById(nextMine-99).id= document.getElementById(nextMine-99).id + 10000
+// document.getElementById(nextMine+100).id= document.getElementById(nextMine+100).id + 10000
+// document.getElementById(nextMine+101).id= document.getElementById(nextMine+101).id + 10000
+// document.getElementById(nextMine+1).id= document.getElementById(nextMine+1).id + 10000
+// document.getElementById(nextMine+99).id= document.getElementById(nextMine+99).id + 10000
+// }
+
+// function mineRevealer(revealingSquare){
+// var clickedSquare = document.getElementById(revealingSquare)
+// if (clickedSquare.classList.includes("mine")){
+// 	gameLose()
+// }
+// }
+
+var squares=document.getElementsByClassName("square")
+var array=arrayConverter(1)
+array.forEach(
+	function(element){
+		element.addEventListener("click", function(){
+		if(gamePlayStart == "None"){
+		startingClickPositionX=(element.id)%100
+		startingClickPositionY=(element.id-((element.id)%100))/100
+		for (var i = 0; i<100; i=i+1){
+		createMines()
+		}
+		gamePlayStart = "Yes"
+	} 
+		if(gamePlayStart=="Yes"){
+		var ClickPositionX=(element.id)%100
+		var ClickPositionY=(element.id-((element.id)%100))/100
+		// mineRevealer(ClickPositionX+ClickPositionY)
+		}
+		})
+	})
+
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
