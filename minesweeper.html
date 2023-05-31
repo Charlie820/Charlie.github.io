@@ -11,6 +11,7 @@
 		align-items: center;
 		margin: auto;
 		left: 200px;
+		position: fixed;
 	}
 
 		.white-square{
@@ -20,7 +21,10 @@
 			background-color: green;
 			z-index: 2;	
 			margin-left: 0px;
-			margin-bottom: -4px;
+			margin-bottom: 0px;
+			text-align: center;
+			font-size:5;
+			color: green;
 		}
 
 		.black-square{
@@ -30,7 +34,10 @@
 			background-color: darkgreen;
 			z-index: 2;
 			margin-left: 0px;
-			margin-bottom: -4px;
+			margin-bottom: 0px;
+			text-align: center;
+			font-size:5;
+			color: darkgreen;
 		}
 
 </style>
@@ -61,6 +68,7 @@ function makeBoard() {
 			oddsquare.classList.add("square");
 		}
 		oddsquare.id= (((squarenumber*2)+(tenssquarenumber*100)+99))
+		oddsquare.innerText = "."
 
 		var evensquare= document.createElement("div");
 		board.appendChild(evensquare);
@@ -73,6 +81,7 @@ function makeBoard() {
 			evensquare.classList.add("square");
 		}
 		evensquare.id= (((squarenumber*2)+(tenssquarenumber*100)+100))
+		evensquare.innerText = "."
 }
 
 	for (var i = 0; i<288; i=i+1){
@@ -85,10 +94,15 @@ var minePosition
 var startingClickPositionX
 var startingClickPositionY
 var gamePlayStart = "None"
-var mines
+var mines= []
 var mineMaker
 var newMine
 var BugFix=0
+var minePositionArray= []
+var revealVariable
+var gameOver= "No"
+var clearSquares = []
+var flaggedSquares = []
 
 function arrayConverter(x){
 	if (x==1){
@@ -105,55 +119,98 @@ minePositiony = 100*Math.floor(24* Math.random()+1)
 minePosition = minePositiony + minePositionx
 newMine=document.getElementById(minePosition)
 mineMaker = document.getElementsByClassName("mine")
+minePositionArray.push(minePosition)
 mines=arrayConverter(2)
 if (BugFix==0){
-	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=3 || Math.abs(startingClickPositionX-((newMine.id)%100))>=3)){
+	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=2 || Math.abs(startingClickPositionX-((newMine.id)%100))>=2)){
 	newMine.classList.add("mine")
-	newMine.style.backgroundColor="red"
 	}
-	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)<=2 && Math.abs(startingClickPositionX-((newMine.id)%100)<=2)))
+	if((Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)<=1 && Math.abs(
+		startingClickPositionX-((newMine.id)%100)<=1))){
+	minePositionArray.pop()
 	createMines()
+}
 }
 
 mines.forEach(
 	function (element){
-		if(element != newMine && (Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=3 || Math.abs(startingClickPositionX-((newMine.id)%100))>=3)){
-			newMine.classList.add("mine")
-			newMine.style.backgroundColor="red"
-			// mineIdAssigner(newMine.id)
+		if(element != newMine && (Math.abs(startingClickPositionY-(newMine.id-((newMine.id)%100))/100)>=2 || Math.abs(startingClickPositionX-((newMine.id)%100))>=2)){
+		newMine.classList.add("mine")
 		}
 		else{
+		minePositionArray.pop()
 		createMines()
 		}
 	})
 BugFix++
 }
 
-function gameLose(){
-mine.forEach(
-	function (element){
-		element.style.backgroundColor= "red"
-		console.log("lose")
-	})
+function checkClearSquares(position){
+var revealArray = [position-(-1), position-1, position-(-100), position-100, position-(-99), position-99, position-(-101), position-101]
+// var placeholderArray= [1, 2, 3, 4, 5, 6, 7, 8 , 9, 10, 13]
+// var placeholderArray2= [2, 4, 6, 8, 10, 12]
+// const filteredArray = placeholderArray.filter(value => !placeholderArray2.includes(value))
+var filteredArray= revealArray.filter(value => !clearSquares.includes(value))
+return(filteredArray)
 }
 
-// function mineIdAssigner(nextMine){
-// document.getElementById(nextMine-100).id= document.getElementById(nextMine-100).id + 10000
-// document.getElementById(nextMine-101).id= document.getElementById(nextMine-101).id + 10000
-// document.getElementById(nextMine-1).id= document.getElementById(nextMine-1).id + 10000
-// document.getElementById(nextMine-99).id= document.getElementById(nextMine-99).id + 10000
-// document.getElementById(nextMine+100).id= document.getElementById(nextMine+100).id + 10000
-// document.getElementById(nextMine+101).id= document.getElementById(nextMine+101).id + 10000
-// document.getElementById(nextMine+1).id= document.getElementById(nextMine+1).id + 10000
-// document.getElementById(nextMine+99).id= document.getElementById(nextMine+99).id + 10000
-// }
+function squareRevealer(position, square){
+if(!flaggedSquares.includes(square)){
+clearSquares.forEach(
+	function(element){
+		if(element!=position){}
+	})
+	revealVariable=0
+	minePositionArray.forEach(
+	function (element){
+		if(element==position){
+			gameLose()
+		}
+		if((element==position-(-1))||(element==position-1)||(element==position-(-100))||(element==position-100)||(element==position-(-101))||(element==position-101)||(element==position-(-99))||(element==position-99)){
+			revealVariable++
+		}
+	})
+	if(gameOver=="No"){
+	if(revealVariable==0){
+		if(((square.id-((square.id)%100))/100+((square.id)%100))%2==0){
+			square.style.backgroundColor="rgba(220, 180, 130, .8)"
+			square.style.color = "rgba(220, 180, 130, .8)"
+		}
+		else{
+			square.style.backgroundColor="tan"
+			square.style.color = "tan"
+		}
+		clearSquares.push(parseInt(position))
+		checkClearSquares(position).forEach(value=>{
+			if(!(value%100<1 || value%100>24 || value>2424 || value<101)){
+			squareRevealer(value, document.getElementById(value))
+		}
+		})
+	}
+	else{
+		if(((square.id-((square.id)%100))/100+((square.id)%100))%2==0){
+			square.style.backgroundColor="rgba(220, 180, 130, .8)"
+		}
+		else{
+			square.style.backgroundColor="tan"
+		}
+		square.style.color = "black"
+		square.innerText= revealVariable
+	}}
+}}
 
-// function mineRevealer(revealingSquare){
-// var clickedSquare = document.getElementById(revealingSquare)
-// if (clickedSquare.classList.includes("mine")){
-// 	gameLose()
-// }
-// }
+var e=0
+
+function gameLose(){
+minePositionArray.forEach(function(value){
+		var EndSquare =document.getElementById(value)
+		EndSquare.style.backgroundColor= "red"
+		EndSquare.style.color= "red"
+		e++
+		console.log(e)})
+		gameOver="Yes"
+		console.log("lose")
+}
 
 var squares=document.getElementsByClassName("square")
 var array=arrayConverter(1)
@@ -166,12 +223,17 @@ array.forEach(
 		for (var i = 0; i<100; i=i+1){
 		createMines()
 		}
+		console.log(minePositionArray)
 		gamePlayStart = "Yes"
 	} 
-		if(gamePlayStart=="Yes"){
-		var ClickPositionX=(element.id)%100
-		var ClickPositionY=(element.id-((element.id)%100))/100
-		// mineRevealer(ClickPositionX+ClickPositionY)
+		squareRevealer(element.id, element)
+		})
+		element.addEventListener("contextmenu", function(){
+		if(gamePlayStart="Yes"){
+			event.preventDefault()
+			element.style.backgroundColor="red"
+			element.style.color="red"
+			flaggedSquares.push(element)
 		}
 		})
 	})

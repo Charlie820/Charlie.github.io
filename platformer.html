@@ -27,19 +27,21 @@ var xposition=500
 mario.style.top= height+"px"
 mario.style.left= xposition+"px"
 
-const gravity= 1
+const gravity= 1.5
 var upVelocity= 0
 var midair= "no"
 var runningVelocity= 0 
 var runningAcceleration= 0
 var runningResistance=0
+var rightdeceleration="no"
+var leftdeceleration="no"
 console.log(mario.style.top)
 
 
 document.addEventListener('keydown', function(e){
 	if(e.key== 'ArrowUp'){
 		if(midair=="no"){
-		jumpInterval=setInterval(jump, 15)
+		jumpInterval=setInterval(jump, 10)
 		upVelocity=upVelocity+30
 		midair="yes"
 	}
@@ -57,26 +59,36 @@ document.addEventListener('keydown', function(e){
 document.addEventListener('keyup', function(e){
 	if(e.key== 'ArrowRight'){
 		runningAcceleration= 0
+		rightdeceleration="yes"
 	}
 	if(e.key== 'ArrowLeft'){
 		runningAcceleration= 0
+		leftdeceleration="yes"
 	}
 })
 
 function strafe(){
-	if(runningVelocity<0){
-	runningResistance=(runningVelocity^2)*(.01)
+	if((runningVelocity<.2 && rightdeceleration=="yes")||(runningVelocity>-.2 && leftdeceleration=="yes")){
+	runningResistance=0
+	runningVelocity=0
+	clearInterval(strafeInterval)
+	rightdeceleration="no"
+	leftdeceleration="no"
 }	
+	else{
+	runningResistance=Math.pow(runningVelocity, 2)*(-.01)
+	if(runningVelocity<0){
+	runningVelocity=runningVelocity+runningAcceleration-runningResistance
+}
 	if(runningVelocity>=0){
-	runningResistance=(runningVelocity^2)*(-.01)
-		}
 	runningVelocity=runningVelocity+runningAcceleration+runningResistance
+}
 	xposition=xposition+runningVelocity
 	mario.style.left=xposition+"px"
 	console.log(runningVelocity)
 	console.log(runningResistance)
 }
-
+}
 
 
 function jump(){
@@ -92,6 +104,8 @@ function jump(){
 		clearInterval(jumpInterval)
 	}
 }
+
+
 
 </script>
 

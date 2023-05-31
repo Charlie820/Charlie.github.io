@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+
+	#BIRDIE{
+		height: 80px;
+		width: 80px;
+		position: absolute;
+		background-image: url("Bird.png");
+		background-size: 80px 80px;
+		top:300px;
+	}
+
+	.tube{
+		width: 100px;
+		background-color: green;
+	}
+
+</style>
+
+</head>
+<body>
+
+<div src="bird.png" id=BIRDIE></div>
+
+<script type="text/javascript">
+
+var tubeSize
+const gravity=.8
+var UpVelocity=0
+var BirdPosition=300
+const bird=document.getElementById("BIRDIE")
+
+function createTubes(){
+tubeSize = () => Math.random()+"px"
+
+}
+
+function Fall(){
+UpVelocity=UpVelocity-gravity
+BirdPosition=BirdPosition-UpVelocity
+if(BirdPosition<-20){
+	BirdPosition=-20
+}
+bird.style.top=Math.round(BirdPosition)+"px"
+if((-60*UpVelocity/15)>60){
+bird.style.transform= "rotate"+60+"deg"
+}
+else{
+bird.style.transform= "rotate("+(-60*UpVelocity/15)+"deg"
+}
+}
+
+document.onkeydown = (e) => {
+if(e.key== 'ArrowUp'){
+	UpVelocity=UpVelocity+20
+	if(UpVelocity>15){
+		UpVelocity=15
+	}
+}
+}
+
+function createTubes(){
+Math.floor(Math.random()*)
+}
+
+
+setInterval(Fall, 25)
+
+</script>
+
+
+
+</body>
+</html>

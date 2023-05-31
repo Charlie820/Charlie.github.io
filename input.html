@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+
+<style type="text/css">
+	
+.point{
+	width: 1px;
+	height: 5px;
+	position: absolute;
+	background-color: black;
+}
+
+.ball{
+	border-radius: 50%;
+	height: 5px;
+	width: 5px;
+	position: absolute;
+	background-color: red;
+}
+
+</style>
+
+</head>
+<body>
+
+	<input type="number" id="domainInput" value=1500>Domain</input>
+	<input type="number" id="scaleInput" value=40>Scale (px)</input>
+	<input type="number" id="shiftDown" value=400>Shift Down</input>
+	<input type="number" id="shiftRight" value=500>Shift Right</input>
+	<input type="number" id="yStretch" value=1>yStretch</input>
+	<input type="number" id="xStretch" value=1>xStretch</input>
+	<input type="checkbox" id="colorInput" value="true">Color change</input>
+	<button id="button">submit</button>
+
+	<script type="text/javascript">
+		
+		var text
+		var gravity=.2
+		var colorChange
+		var scale
+		var balls=[]
+		var leFunction
+		var colortoggle=0
+		var downShift
+		var rightShift
+		var funcDomain
+		var xstretch
+		var ystretch
+		var ballInterval
+		var ballCounter=0 
+		var dataArray=[0]
+		var start="no"
+
+		button.addEventListener("click", function(){
+			scale= parseInt(scaleInput.value)
+			downShift=parseInt(shiftDown.value)
+			ystretch=parseInt(yStretch.value)
+			rightShift=parseInt(shiftRight.value)
+			xstretch=parseInt(xStretch.value)
+			funcDomain=parseInt(domainInput.value)
+			start="yes"
+			for(var i=0; i<funcDomain; i++){
+			createMathematicalFunction(i)
+		}
+		})
+
+		colorInput.addEventListener("click", function(){
+			colortoggle++
+			console.log(colorChange)
+		if(colortoggle%2==1){
+			colorChange="true"
+		}
+		if(colortoggle%2==0){
+			colorChange="false"
+		}
+		})
+
+	function f(n){
+		var x=(n/scale-(rightShift/scale))
+		return((
+		//input function here
+			Math.cos(x))
+		//ignore everything else under here
+		*(-1)*scale+downShift)		
+	}
+
+	function ddxf(x, d=.00000001){
+		return(f(x+d)-f(x))/d
+	}
+
+		//processes the user inputs and creates the function
+
+		document.addEventListener('mousedown', function(){
+		if(start=="yes"){
+			ballInterval=setInterval(createBalls, 50, event)
+		//runs below function every 50 ms
+			function createBalls(event){
+			ballCounter++
+			var newBall=document.createElement("div")
+			document.body.appendChild(newBall)
+			newBall.classList.add("ball")
+			newBall.id=ballCounter
+			newBall.style.top=event.clientY+"px"
+			newBall.style.left=event.clientX+"px"
+		//need separate variable for the div and the object storing the div information
+		const ballData={
+				xcoord:event.clientX,
+				ycoord:event.clientY,
+				xvelocity:0,
+				yvelocity:0,
+				id: ballCounter,
+				angle : function(){
+					return(Math.atan(this.yvelocity/this.xvelocity))
+					// return(Math.acos(this.yvelocity)/Math.asin(this.xvelocity))
+			}}
+		//ballData stores 
+			dataArray.push(ballData)
+		}}
+		})
+
+		document.addEventListener('mouseup', function(){
+			clearInterval(ballInterval)
+		})
+
+		// creates interval on which balls will be created, clears it when the mouse is lifted
+
+
+		function createMathematicalFunction(x){
+			console.log(downShift)
+			var output=f(x)
+			var funcpoint= document.createElement("div");
+			document.body.appendChild(funcpoint);
+			if(output>0){
+			funcpoint.classList.add("point")
+			funcpoint.style.top=Math.round(output)+"px"
+			funcpoint.style.height=Math.ceil(Math.abs(ddxf(x, -1)))+1+"px"
+		}
+			if(output<0){
+			// funcpoint.style.top=0+"px"
+			// funcpoint.style.height=Math.round((ddxf(x, -1))+output)+"px"
+			}
+			funcpoint.style.left=x+"px"
+
+			if(ddxf(x)<0){
+			}
+		}
+
+
+
+		function FallingMotion(){
+			let tempBalls=document.getElementsByClassName("ball")
+			var balls = arrayConvert()
+			function arrayConvert(){
+				return Array.from(tempBalls)
+			}
+			balls.forEach(function (e){
+		//e is the div, element is the corresponding object
+				var element=convertToDiv(e)
+				var newX=element.xcoord+element.xvelocity
+				var newY=element.ycoord+element.yvelocity
+				element.yvelocity=element.yvelocity+gravity
+				if(newY>f(newX)){
+					bounce(e, element)
+					newY=newY-(newY-f(newX)+10)
+				}
+				if(newY>1000){
+					newY=1000
+				}
+				e.style.top=Math.round(newY-2)+"px"
+				element.ycoord=newY
+				e.style.left=Math.round(newX-2)+"px"
+				element.xcoord=newX
+		//moves balls based on their velocity each time the function is run
+			})
+		}
+
+		function convertToDiv(element){
+			return(dataArray[element.id])
+		}
+
+		function bounce(div, element){
+			var derivative=ddxf(element.xcoord)
+			var ballAngle=element.angle()
+			var totalVelocity=Math.sqrt(element.yvelocity*element.yvelocity+element.xvelocity*element.xvelocity)
+			console.log(ballAngle)
+			angleDifference=((0-1)/derivative)-ballAngle
+			newAngle=angleDifference+((0-1)/derivative)
+			element.xvelocity=(Math.sin(newAngle)*Math.sin(newAngle))*totalVelocity
+			element.yvelocity=(Math.cos(newAngle)*Math.sin(newAngle))*totalVelocity
+		}
+
+		// function pointToFunctionDist(){
+
+		// 	Math.sqrt(((this.x)*(this.x))+((this.y)*(this.y)))
+		// }
+
+		var fallInterval=setInterval(FallingMotion, 30)
+
+	</script>
+
+</body>
+</html>

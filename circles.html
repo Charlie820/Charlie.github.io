@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The JavaScript <i>this</i> Keyword</h1>
+<p>In this example, <b>this</b> refers to the <b>person</b> object.</p>
+<p>Because <b>fullName</b> is a method of the person object.</p>
+
+<p id="demo"></p>
+
+<script>
+// Create an object:
+const person = {
+  firstName: "John",
+  lastName: "Doe",
+  id: 5566,
+  fullName : function() {
+    return this.firstName + " " + this.lastName;
+  }
+};
+
+console.log(person.fullName)
+
+// Display data from the object:
+document.getElementById("demo").innerHTML = person.fullName();
+</script>
+
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+	
+	.dot{
+		border-radius: 50%;
+		position: absolute;
+	}
+
+</style>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+var size=0
+var dots=[]
+
+function shake(){
+	dots.forEach(
+		function(element){
+			element.style.left=parseInt(element.style.left)-Math.round((Math.random()-.5)*6)+"px"
+			element.style.top=parseInt(element.style.top)-Math.round((Math.random()-.5)*6)+"px"
+			element.style.backgroundColor="rgb("+Math.floor(Math.random()*250)+","+(Math.floor(Math.random()*250))+","+(Math.floor(Math.random()*250))+","+(Math.floor(Math.random()+250))+")"
+		})
+}
+
+function createDots(size){
+	var newDot= document.createElement("div")
+	document.body.appendChild(newDot)
+	newDot.style.height=size+"px"
+	newDot.style.width=size+"px"
+	newDot.classList.add("dot")
+	dots.push(newDot)
+}
+
+for(var i=0; i<50; i++){
+	size++
+	createDots(size)
+}
+
+setInterval(shake, 20)
+
+document.addEventListener("mousemove", function(){
+	dots.forEach(
+		function(element){
+			element.style.left=event.clientX+"px"
+			element.style.top=event.clientY+"px"
+		})
+
+	})
+
+
+</script>
+
+</body>
+</html> -->
